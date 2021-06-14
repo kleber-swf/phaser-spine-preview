@@ -26,6 +26,18 @@
  * ```
  */
 
+import 'p2';
+import 'pixi';
+import Phaser from 'phaser-ce';
 import './index.css';
 
-console.log('👋 This message is being logged by "renderer.js", included via webpack');
+const game = new Phaser.Game(1024, 768, Phaser.AUTO, 'game', { preload, create });
+
+function preload() {
+	console.log('preload');
+}
+
+function create() {
+	console.log('create');
+
+}
