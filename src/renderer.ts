@@ -1,43 +1,23 @@
-/**
- * This file will automatically be loaded by webpack and run in the "renderer" context.
- * To learn more about the differences between the "main" and the "renderer" context in
- * Electron, visit:
- *
- * https://electronjs.org/docs/tutorial/application-architecture#main-and-renderer-processes
- *
- * By default, Node.js integration in this file is disabled. When enabling Node.js integration
- * in a renderer process, please be aware of potential security implications. You can read
- * more about security risks here:
- *
- * https://electronjs.org/docs/tutorial/security
- *
- * To enable Node.js integration in this file, open up `main.js` and enable the `nodeIntegration`
- * flag:
- *
- * ```
- *  // Create the browser window.
- *  mainWindow = new BrowserWindow({
- *    width: 800,
- *    height: 600,
- *    webPreferences: {
- *      nodeIntegration: true
- *    }
- *  });
- * ```
- */
-
 import 'p2';
 import 'pixi';
 import Phaser from 'phaser-ce';
+import { ipcRenderer } from 'electron';
+import { Events } from './events';
 import './index.css';
+
+const PhaserSpine = require('./plugins/phaser-spine');
+
+const loadButton = document.getElementById('load-button');
+loadButton.addEventListener('click', () => ipcRenderer.send(Events.OPEN_FILE_REQUEST));
 
 const game = new Phaser.Game(1024, 768, Phaser.AUTO, 'game', { preload, create });
 
 function preload() {
+	game.add.plugin(PhaserSpine.SpinePlugin);
+	// (game as any).load.spine('buddy', 'assets/buddy_skeleton.json');
 	console.log('preload');
 }
 
 function create() {
 	console.log('create');
-
 }
