@@ -42,9 +42,9 @@
 var spine = {
 	radDeg: 180 / Math.PI,
 	degRad: Math.PI / 180,
-	Float32Array: typeof(Float32Array) === 'undefined' ? Array : Float32Array,
-	Uint32Array: typeof(Uint32Array) === 'undefined' ? Array : Uint32Array,
-	Uint16Array: typeof(Uint16Array) === 'undefined' ? Array : Uint16Array
+	Float32Array: typeof (Float32Array) === 'undefined' ? Array : Float32Array,
+	Uint32Array: typeof (Uint32Array) === 'undefined' ? Array : Uint32Array,
+	Uint16Array: typeof (Uint16Array) === 'undefined' ? Array : Uint16Array
 };
 spine.temp = new spine.Float32Array(2);
 
@@ -403,71 +403,71 @@ spine.IkConstraint.apply2 = function (parent, child, targetX, targetY, bendDir, 
 	}
 	var l1 = Math.sqrt(dx * dx + dy * dy), l2 = child.data.length * csx, a1, a2;
 	outer:
-		if (u) {
-			l2 *= psx;
-			var cos = (tx * tx + ty * ty - l1 * l1 - l2 * l2) / (2 * l1 * l2);
-			if (cos < -1) cos = -1;
-			else if (cos > 1) cos = 1;
-			a2 = Math.acos(cos) * bendDir;
-			var a = l1 + l2 * cos, o = l2 * Math.sin(a2);
-			a1 = Math.atan2(ty * a - tx * o, tx * a + ty * o);
-		} else {
-			var a = psx * l2, b = psy * l2, ta = Math.atan2(ty, tx);
-			var aa = a * a, bb = b * b, ll = l1 * l1, dd = tx * tx + ty * ty;
-			var c0 = bb * ll + aa * dd - aa * bb, c1 = -2 * bb * l1, c2 = bb - aa;
-			var d = c1 * c1 - 4 * c2 * c0;
-			if (d >= 0) {
-				var q = Math.sqrt(d);
-				if (c1 < 0) q = -q;
-				q = -(c1 + q) / 2;
-				var r0 = q / c2, r1 = c0 / q;
-				var r = Math.abs(r0) < Math.abs(r1) ? r0 : r1;
-				if (r * r <= dd) {
-					var y = Math.sqrt(dd - r * r) * bendDir;
-					a1 = ta - Math.atan2(y, r);
-					a2 = Math.atan2(y / psy, (r - l1) / psx);
-					break outer;
-				}
-			}
-			var minAngle = 0, minDist = Number.MAX_VALUE, minX = 0, minY = 0;
-			var maxAngle = 0, maxDist = 0, maxX = 0, maxY = 0;
-			var x = l1 + a, dist = x * x;
-			if (dist > maxDist) {
-				maxAngle = 0;
-				maxDist = dist;
-				maxX = x;
-			}
-			x = l1 - a;
-			dist = x * x;
-			if (dist < minDist) {
-				minAngle = Math.PI;
-				minDist = dist;
-				minX = x;
-			}
-			var angle = Math.acos(-a * l1 / (aa - bb));
-			x = a * Math.cos(angle) + l1;
-			var y = b * Math.sin(angle);
-			dist = x * x + y * y;
-			if (dist < minDist) {
-				minAngle = angle;
-				minDist = dist;
-				minX = x;
-				minY = y;
-			}
-			if (dist > maxDist) {
-				maxAngle = angle;
-				maxDist = dist;
-				maxX = x;
-				maxY = y;
-			}
-			if (dd <= (minDist + maxDist) / 2) {
-				a1 = ta - Math.atan2(minY * bendDir, minX);
-				a2 = minAngle * bendDir;
-			} else {
-				a1 = ta - Math.atan2(maxY * bendDir, maxX);
-				a2 = maxAngle * bendDir;
+	if (u) {
+		l2 *= psx;
+		var cos = (tx * tx + ty * ty - l1 * l1 - l2 * l2) / (2 * l1 * l2);
+		if (cos < -1) cos = -1;
+		else if (cos > 1) cos = 1;
+		a2 = Math.acos(cos) * bendDir;
+		var a = l1 + l2 * cos, o = l2 * Math.sin(a2);
+		a1 = Math.atan2(ty * a - tx * o, tx * a + ty * o);
+	} else {
+		var a = psx * l2, b = psy * l2, ta = Math.atan2(ty, tx);
+		var aa = a * a, bb = b * b, ll = l1 * l1, dd = tx * tx + ty * ty;
+		var c0 = bb * ll + aa * dd - aa * bb, c1 = -2 * bb * l1, c2 = bb - aa;
+		var d = c1 * c1 - 4 * c2 * c0;
+		if (d >= 0) {
+			var q = Math.sqrt(d);
+			if (c1 < 0) q = -q;
+			q = -(c1 + q) / 2;
+			var r0 = q / c2, r1 = c0 / q;
+			var r = Math.abs(r0) < Math.abs(r1) ? r0 : r1;
+			if (r * r <= dd) {
+				var y = Math.sqrt(dd - r * r) * bendDir;
+				a1 = ta - Math.atan2(y, r);
+				a2 = Math.atan2(y / psy, (r - l1) / psx);
+				break outer;
 			}
 		}
+		var minAngle = 0, minDist = Number.MAX_VALUE, minX = 0, minY = 0;
+		var maxAngle = 0, maxDist = 0, maxX = 0, maxY = 0;
+		var x = l1 + a, dist = x * x;
+		if (dist > maxDist) {
+			maxAngle = 0;
+			maxDist = dist;
+			maxX = x;
+		}
+		x = l1 - a;
+		dist = x * x;
+		if (dist < minDist) {
+			minAngle = Math.PI;
+			minDist = dist;
+			minX = x;
+		}
+		var angle = Math.acos(-a * l1 / (aa - bb));
+		x = a * Math.cos(angle) + l1;
+		var y = b * Math.sin(angle);
+		dist = x * x + y * y;
+		if (dist < minDist) {
+			minAngle = angle;
+			minDist = dist;
+			minX = x;
+			minY = y;
+		}
+		if (dist > maxDist) {
+			maxAngle = angle;
+			maxDist = dist;
+			maxX = x;
+			maxY = y;
+		}
+		if (dd <= (minDist + maxDist) / 2) {
+			a1 = ta - Math.atan2(minY * bendDir, minX);
+			a2 = minAngle * bendDir;
+		} else {
+			a1 = ta - Math.atan2(maxY * bendDir, maxX);
+			a2 = maxAngle * bendDir;
+		}
+	}
 	var os = Math.atan2(cy, cx) * s2;
 	a1 = (a1 - os) * spine.radDeg + os1;
 	a2 = (a2 + os) * spine.radDeg * s2 + os2;
@@ -1694,7 +1694,7 @@ spine.AnimationStateData.prototype = {
 	}
 };
 
-spine.TrackEntry = function () {};
+spine.TrackEntry = function () { };
 spine.TrackEntry.prototype = {
 	next: null, previous: null,
 	animation: null,
@@ -2104,7 +2104,7 @@ spine.SkeletonJson.prototype = {
 					if (map["edges"]) mesh.edges = this.getUint16Array(map, "edges");
 				} else {
 					mesh.inheritFFD = map.hasOwnProperty("ffd") ? map["ffd"] : true;
-					this.linkedMeshes[this.linkedMeshes.length] = {mesh: mesh, skin: map["skin"], slotIndex: slotIndex, parent: map["parent"]};
+					this.linkedMeshes[this.linkedMeshes.length] = { mesh: mesh, skin: map["skin"], slotIndex: slotIndex, parent: map["parent"] };
 				}
 				return mesh;
 			case spine.AttachmentType.weightedmesh:
@@ -2129,10 +2129,10 @@ spine.SkeletonJson.prototype = {
 					var vertices = this.getFloatArray(map, "vertices", 1);
 					var weights = new spine.Float32Array(uvs.length * 3 * 3);
 					var bones = new spine.Uint32Array(uvs.length * 3);
-					for (var i = 0, b = 0, w = 0, n = vertices.length; i < n; ) {
+					for (var i = 0, b = 0, w = 0, n = vertices.length; i < n;) {
 						var boneCount = vertices[i++] | 0;
 						bones[b++] = boneCount;
-						for (var nn = i + boneCount * 4; i < nn; ) {
+						for (var nn = i + boneCount * 4; i < nn;) {
 							bones[b++] = vertices[i];
 							weights[w++] = vertices[i + 1] * scale;
 							weights[w++] = vertices[i + 2] * scale;
@@ -2150,13 +2150,13 @@ spine.SkeletonJson.prototype = {
 					if (map["edges"]) mesh.edges = this.getUint16Array(map, "edges");
 				} else {
 					mesh.inheritFFD = map.hasOwnProperty("ffd") ? map["ffd"] : true;
-					this.linkedMeshes[this.linkedMeshes.length] = {mesh: mesh, skin: map["skin"], slotIndex: slotIndex, parent: map["parent"]};
+					this.linkedMeshes[this.linkedMeshes.length] = { mesh: mesh, skin: map["skin"], slotIndex: slotIndex, parent: map["parent"] };
 				}
 				return mesh;
 			case spine.AttachmentType.boundingbox:
 				var attachment = this.attachmentLoader.newBoundingBoxAttachment(skin, name);
 				var vertices = map["vertices"];
-                attachment.vertices = new spine.Float32Array(vertices.length);
+				attachment.vertices = new spine.Float32Array(vertices.length);
 				for (var i = 0, n = vertices.length; i < n; i++)
 					attachment.vertices[i] = vertices[i] * scale;
 				return attachment;
@@ -2504,11 +2504,9 @@ spine.Atlas = function (atlasText, textureLoader) {
 			reader.readTuple(tuple);
 			var x = parseInt(tuple[0]);
 			var y = parseInt(tuple[1]);
-
 			reader.readTuple(tuple);
 			var width = parseInt(tuple[0]);
 			var height = parseInt(tuple[1]);
-
 			region.u = x / page.width;
 			region.v = y / page.height;
 			if (region.rotate) {
@@ -2602,7 +2600,7 @@ spine.Atlas.TextureWrap = {
 	repeat: 2
 };
 
-spine.AtlasPage = function () {};
+spine.AtlasPage = function () { };
 spine.AtlasPage.prototype = {
 	name: null,
 	format: null,
@@ -2615,7 +2613,7 @@ spine.AtlasPage.prototype = {
 	height: 0
 };
 
-spine.AtlasRegion = function () {};
+spine.AtlasRegion = function () { };
 spine.AtlasRegion.prototype = {
 	page: null,
 	name: null,
@@ -2873,415 +2871,415 @@ spine.SkeletonBounds.prototype = {
 };
 
 var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	function __() { this.constructor = d; }
+	d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var PhaserSpine;
 (function (PhaserSpine) {
-    var SpinePlugin = (function (_super) {
-        __extends(SpinePlugin, _super);
-        function SpinePlugin(game, parent) {
-            var _this = _super.call(this, game, parent) || this;
-            _this.addSpineCache();
-            _this.addSpineFactory();
-            _this.addSpineLoader();
-            return _this;
-        }
-        SpinePlugin.prototype.addSpineLoader = function () {
-            Phaser.Loader.prototype.spine = function (key, url, scalingVariants) {
-                var _this = this;
-                var atlasKey = key + "Atlas";
-                var cacheData = {
-                    atlas: atlasKey,
-                    basePath: (url.substring(0, url.lastIndexOf('/')) === '') ? '.' : url.substring(0, url.lastIndexOf('/')),
-                    variants: undefined
-                };
-                if (undefined === scalingVariants) {
-                    scalingVariants = [''];
-                }
-                else {
-                    cacheData.variants = scalingVariants;
-                }
-                scalingVariants.forEach(function (variant) {
-                    _this.onFileComplete.add(function (progress, cacheKey) {
-                        if (cacheKey === atlasKey) {
-                            var atlas = new spine.Atlas(_this.game.cache.getText(cacheKey), {
-                                load: function (page, file, atlas) {
-                                    _this.image(file, cacheData.basePath + '/' + file.substr(0, file.lastIndexOf('.')) + variant + '.png');
-                                }
-                            });
-                        }
-                    });
-                    _this.text(atlasKey, url.substr(0, url.lastIndexOf('.')) + variant + '.atlas');
-                });
-                this.json(key, url);
-                this.game.cache.addSpine(key, cacheData);
-            };
-        };
-        SpinePlugin.prototype.addSpineFactory = function () {
-            Phaser.GameObjectFactory.prototype.spine = function (x, y, key, scalingVariant, group) {
-                if (group === undefined) {
-                    group = this.world;
-                }
-                var spineObject = new PhaserSpine.Spine(this.game, key, scalingVariant);
-                spineObject.setToSetupPose();
-                spineObject.position.x = x;
-                spineObject.position.y = y;
-                return group.add(spineObject);
-            };
-            Phaser.GameObjectCreator.prototype.spine = function (x, y, key, scalingVariant, group) {
-                return new PhaserSpine.Spine(this.game, key, scalingVariant);
-            };
-        };
-        SpinePlugin.prototype.addSpineCache = function () {
-            Phaser.Cache.prototype.spine = {};
-            Phaser.Cache.prototype.addSpine = function (key, data) {
-                this.spine[key] = data;
-            };
-            Phaser.Cache.prototype.getSpine = function (key) {
-                if (!this.spine.hasOwnProperty(key)) {
-                    console.warn('Phaser.Cache.getSpine: Key "' + key + '" not found in Cache.');
-                }
-                return this.spine[key];
-            };
-        };
-        return SpinePlugin;
-    }(Phaser.Plugin));
-    SpinePlugin.RESOLUTION_REGEXP = /@(.+)x/;
-    PhaserSpine.SpinePlugin = SpinePlugin;
+	var SpinePlugin = (function (_super) {
+		__extends(SpinePlugin, _super);
+		function SpinePlugin(game, parent) {
+			var _this = _super.call(this, game, parent) || this;
+			_this.addSpineCache();
+			_this.addSpineFactory();
+			_this.addSpineLoader();
+			return _this;
+		}
+		SpinePlugin.prototype.addSpineLoader = function () {
+			Phaser.Loader.prototype.spine = function (key, url, scalingVariants) {
+				var _this = this;
+				var atlasKey = key + "Atlas";
+				var cacheData = {
+					atlas: atlasKey,
+					basePath: (url.substring(0, url.lastIndexOf('/')) === '') ? '.' : url.substring(0, url.lastIndexOf('/')),
+					variants: undefined
+				};
+				if (undefined === scalingVariants) {
+					scalingVariants = [''];
+				}
+				else {
+					cacheData.variants = scalingVariants;
+				}
+				scalingVariants.forEach(function (variant) {
+					_this.onFileComplete.add(function (progress, cacheKey) {
+						if (cacheKey === atlasKey) {
+							var atlas = new spine.Atlas(_this.game.cache.getText(cacheKey), {
+								load: function (page, file, atlas) {
+									_this.image(file, cacheData.basePath + '/' + file.substr(0, file.lastIndexOf('.')) + variant + '.png');
+								}
+							});
+						}
+					});
+					_this.text(atlasKey, url.substr(0, url.lastIndexOf('.')) + variant + '.atlas');
+				});
+				this.json(key, url);
+				this.game.cache.addSpine(key, cacheData);
+			};
+		};
+		SpinePlugin.prototype.addSpineFactory = function () {
+			Phaser.GameObjectFactory.prototype.spine = function (x, y, key, scalingVariant, group) {
+				if (group === undefined) {
+					group = this.world;
+				}
+				var spineObject = new PhaserSpine.Spine(this.game, key, scalingVariant);
+				spineObject.setToSetupPose();
+				spineObject.position.x = x;
+				spineObject.position.y = y;
+				return group.add(spineObject);
+			};
+			Phaser.GameObjectCreator.prototype.spine = function (x, y, key, scalingVariant, group) {
+				return new PhaserSpine.Spine(this.game, key, scalingVariant);
+			};
+		};
+		SpinePlugin.prototype.addSpineCache = function () {
+			Phaser.Cache.prototype.spine = {};
+			Phaser.Cache.prototype.addSpine = function (key, data) {
+				this.spine[key] = data;
+			};
+			Phaser.Cache.prototype.getSpine = function (key) {
+				if (!this.spine.hasOwnProperty(key)) {
+					console.warn('Phaser.Cache.getSpine: Key "' + key + '" not found in Cache.');
+				}
+				return this.spine[key];
+			};
+		};
+		return SpinePlugin;
+	}(Phaser.Plugin));
+	SpinePlugin.RESOLUTION_REGEXP = /@(.+)x/;
+	PhaserSpine.SpinePlugin = SpinePlugin;
 })(PhaserSpine || (PhaserSpine = {}));
 Phaser.Rope.prototype.postUpdate = function () { };
 spine.Bone.yDown = true;
 var PhaserSpine;
 (function (PhaserSpine) {
-    var Spine = (function (_super) {
-        __extends(Spine, _super);
-        function Spine(game, key, scalingVariant) {
-            var _this = _super.call(this, game) || this;
-            _this.imageScale = 1;
-            var data = _this.game.cache.getSpine(key);
-            if (undefined !== scalingVariant && data.variants.indexOf(scalingVariant) !== -1) {
-                _this.imageScale = _this.getScaleFromVariant(scalingVariant);
-            }
-            else if (data.variants && data.variants.length >= 1) {
-                _this.imageScale = _this.getScaleFromVariant(data.variants[0]);
-            }
-            var textureLoader = new PhaserSpine.SpineTextureLoader(game);
-            var spineAtlas = new spine.Atlas(game.cache.getText(data.atlas), textureLoader);
-            var attachmentLoader = new spine.AtlasAttachmentLoader(spineAtlas);
-            var spineJsonParser = new spine.SkeletonJson(attachmentLoader);
-            _this.skeletonData = spineJsonParser.readSkeletonData(game.cache.getJSON(key));
-            if (!_this.skeletonData) {
-                throw new Error('Spine data must be preloaded using Loader.spine');
-            }
-            _this.onEvent = new Phaser.Signal();
-            _this.onComplete = new Phaser.Signal();
-            _this.onEnd = new Phaser.Signal();
-            _this.skeleton = new spine.Skeleton(_this.skeletonData);
-            _this.skeleton.updateWorldTransform();
-            _this.stateData = new spine.AnimationStateData(_this.skeletonData);
-            _this.state = new spine.AnimationState(_this.stateData);
-            _this.state.onEvent = _this.onEvent.dispatch.bind(_this.onEvent);
-            _this.state.onComplete = _this.onComplete.dispatch.bind(_this.onComplete);
-            _this.state.onEnd = _this.onEnd.dispatch.bind(_this.onEnd);
-            _this.slotContainers = [];
-            for (var i = 0, n = _this.skeleton.slots.length; i < n; i++) {
-                var slot = _this.skeleton.slots[i];
-                var attachment = slot.attachment;
-                var slotContainer = new Phaser.Group(game);
-                _this.slotContainers.push(slotContainer);
-                _this.add(slotContainer);
-                if (attachment instanceof spine.RegionAttachment) {
-                    var spriteName = attachment.rendererObject.name;
-                    var sprite = _this.createSprite(slot, attachment);
-                    slot.currentSprite = sprite;
-                    slot.currentSpriteName = spriteName;
-                    slotContainer.add(sprite);
-                }
-                else if (attachment instanceof spine.WeightedMeshAttachment) {
-                    var mesh = _this.createMesh(slot, attachment);
-                    slot.currentMesh = mesh;
-                    slot.currentMeshName = attachment.name;
-                    slotContainer.add(mesh);
-                }
-                else {
-                    continue;
-                }
-            }
-            _this.autoUpdate = true;
-            return _this;
-        }
-        Object.defineProperty(Spine.prototype, "autoUpdate", {
-            get: function () {
-                return (this.updateTransform === PhaserSpine.Spine.prototype.autoUpdateTransform);
-            },
-            set: function (value) {
-                this.updateTransform = value ? PhaserSpine.Spine.prototype.autoUpdateTransform : PIXI.DisplayObjectContainer.prototype.updateTransform;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        ;
-        ;
-        Spine.prototype.getScaleFromVariant = function (variant) {
-            var scale = PhaserSpine.SpinePlugin.RESOLUTION_REGEXP.exec(variant);
-            if (scale) {
-                return parseFloat(scale[1]);
-            }
-            return 1;
-        };
-        Spine.prototype.setTint = function (tint) {
-            this.globalTint = tint;
-            var slots = this.skeleton.slots;
-            for (var i = 0; i < slots.length; i++) {
-                var slot = slots[i];
-                slot.currentSprite.tint = tint;
-            }
-        };
-        Spine.prototype.update = function (dt) {
-            if (dt === undefined) {
-                return;
-            }
-            this.state.update(dt);
-            this.state.apply(this.skeleton);
-            this.skeleton.updateWorldTransform();
-            var drawOrder = this.skeleton.drawOrder;
-            var slots = this.skeleton.slots;
-            for (var i = 0, n = drawOrder.length; i < n; i++) {
-                if (drawOrder[i].currentSprite !== undefined) {
-                    this.children[i] = drawOrder[i].currentSprite.parent;
-                }
-            }
-            for (var i = 0, n = slots.length; i < n; i++) {
-                var slot = slots[i];
-                var attachment = slot.attachment;
-                var slotContainer = this.slotContainers[i];
-                if (!attachment) {
-                    slotContainer.visible = false;
-                    continue;
-                }
-                var type = attachment.type;
-                if (type === spine.AttachmentType.region) {
-                    if (attachment.rendererObject) {
-                        if (!slot.currentSpriteName || slot.currentSpriteName !== attachment.name) {
-                            var spriteName = attachment.rendererObject.name;
-                            if (slot.currentSprite !== undefined) {
-                                slot.currentSprite.visible = false;
-                            }
-                            slot.sprites = slot.sprites || {};
-                            if (slot.sprites[spriteName] !== undefined) {
-                                slot.sprites[spriteName].visible = true;
-                            }
-                            else {
-                                var sprite = this.createSprite(slot, attachment);
-                                slotContainer.add(sprite);
-                            }
-                            slot.currentSprite = slot.sprites[spriteName];
-                            slot.currentSpriteName = spriteName;
-                        }
-                    }
-                    var bone = slot.bone;
-                    slotContainer.position.x = attachment.x * bone.a + attachment.y * bone.b + bone.worldX;
-                    slotContainer.position.y = attachment.x * bone.c + attachment.y * bone.d + bone.worldY;
-                    slotContainer.scale.x = bone.getWorldScaleX();
-                    slotContainer.scale.y = bone.getWorldScaleY();
-                    slotContainer.rotation = (bone.getWorldRotationX() - attachment.rotation) * Math.PI / 180;
-                    if (bone.getWorldScaleY() < 0) {
-                        slotContainer.scale.y = -slotContainer.scale.y;
-                    }
-                    if (bone.getWorldScaleX() < 0) {
-                        slotContainer.scale.x = -slotContainer.scale.x;
-                    }
-                    if (bone.getWorldScaleY() < 0 || bone.getWorldScaleX() < 0) {
-                        slotContainer.rotation = -slotContainer.rotation;
-                    }
-                    slot.currentSprite.blendMode = slot.blendMode;
-                    if (!this.globalTint) {
-                        slot.currentSprite.tint = slot.currentSprite.tint = parseInt(Phaser.Color.componentToHex(255 * slot.r).substring(0, 2) + Phaser.Color.componentToHex(255 * slot.g).substring(0, 2) + Phaser.Color.componentToHex(255 * slot.b).substring(0, 2), 16);
-                    }
-                }
-                else if (type === spine.AttachmentType.weightedmesh || type === spine.AttachmentType.weightedlinkedmesh) {
-                    if (!slot.currentMeshName || slot.currentMeshName !== attachment.name) {
-                        var meshName = attachment.name;
-                        if (slot.currentMesh !== undefined) {
-                            slot.currentMesh.visible = false;
-                        }
-                        slot.meshes = slot.meshes || {};
-                        if (slot.meshes[meshName] !== undefined) {
-                            slot.meshes[meshName].visible = true;
-                        }
-                        else {
-                            var mesh = this.createMesh(slot, attachment);
-                            slotContainer.add(mesh);
-                        }
-                        slot.currentMesh = slot.meshes[meshName];
-                        slot.currentMeshName = meshName;
-                    }
-                    attachment.computeWorldVertices(slot.bone.skeleton.x, slot.bone.skeleton.y, slot, slot.currentMesh.vertices);
-                }
-                else {
-                    slotContainer.visible = false;
-                    continue;
-                }
-                slotContainer.visible = true;
-                slotContainer.alpha = slot.a;
-            }
-        };
-        Spine.prototype.destroy = function (destroyChildren, soft) {
-            _super.prototype.destroy.call(this, true, soft);
-        };
-        Spine.prototype.autoUpdateTransform = function () {
-            if (Spine.globalAutoUpdate) {
-                this.lastTime = this.lastTime || Date.now();
-                var timeDelta = (Date.now() - this.lastTime) * 0.001;
-                this.lastTime = Date.now();
-                this.update(timeDelta);
-            }
-            else {
-                this.lastTime = 0;
-            }
-            PIXI.DisplayObjectContainer.prototype.updateTransform.call(this);
-        };
-        ;
-        Spine.prototype.createSprite = function (slot, attachment) {
-            var descriptor = attachment.rendererObject;
-            var baseTexture = descriptor.page.rendererObject;
-            var spriteRect = new PIXI.Rectangle(descriptor.x, descriptor.y, descriptor.rotate ? descriptor.height : descriptor.width, descriptor.rotate ? descriptor.width : descriptor.height);
-            var spriteTexture = new PIXI.Texture(baseTexture, spriteRect);
-            var sprite = new Phaser.Sprite(this.game, 0, 0, spriteTexture);
-            var baseRotation = descriptor.rotate ? Math.PI * 0.5 : 0.0;
-            sprite.scale.x = descriptor.width / descriptor.originalWidth * attachment.scaleX / this.imageScale;
-            sprite.scale.y = descriptor.height / descriptor.originalHeight * attachment.scaleY / this.imageScale;
-            sprite.rotation = baseRotation;
-            sprite.anchor.x = (0.5 * descriptor.originalWidth - descriptor.offsetX) / descriptor.width;
-            sprite.anchor.y = 1.0 - ((0.5 * descriptor.originalHeight - descriptor.offsetY) / descriptor.height);
-            sprite.alpha = attachment.a;
-            if (descriptor.rotate) {
-                var x1 = sprite.scale.x;
-                sprite.scale.x = sprite.scale.y;
-                sprite.scale.y = x1;
-            }
-            slot.sprites = slot.sprites || {};
-            slot.sprites[descriptor.name] = sprite;
-            return sprite;
-        };
-        ;
-        Spine.prototype.createMesh = function (slot, attachment) {
-            var descriptor = attachment.rendererObject;
-            var baseTexture = descriptor.page.rendererObject;
-            var texture = new PIXI.Texture(baseTexture);
-            var strip = new Phaser.Rope(this.game, 0, 0, texture);
-            strip.drawMode = 1;
-            strip.canvasPadding = 1.5;
-            strip.vertices = new spine.Float32Array(attachment.uvs.length);
-            strip.uvs = attachment.uvs;
-            strip.indices = attachment.triangles;
-            strip.alpha = attachment.a;
-            slot.meshes = slot.meshes || {};
-            slot.meshes[attachment.name] = strip;
-            return strip;
-        };
-        ;
-        Spine.prototype.setMixByName = function (fromName, toName, duration) {
-            this.stateData.setMixByName(fromName, toName, duration);
-        };
-        ;
-        Spine.prototype.setAnimationByName = function (trackIndex, animationName, loop) {
-            if (loop === void 0) { loop = false; }
-            var animation = this.state.data.skeletonData.findAnimation(animationName);
-            if (!animation) {
-                console.warn("Animation not found: " + animationName);
-                return null;
-            }
-            return this.state.setAnimation(trackIndex, animation, loop);
-        };
-        ;
-        Spine.prototype.addAnimationByName = function (trackIndex, animationName, loop, delay) {
-            if (loop === void 0) { loop = false; }
-            if (delay === void 0) { delay = 0; }
-            var animation = this.state.data.skeletonData.findAnimation(animationName);
-            if (!animation) {
-                console.warn("Animation not found: " + animationName);
-                return null;
-            }
-            return this.state.addAnimation(trackIndex, animation, loop, delay);
-        };
-        ;
-        Spine.prototype.getCurrentAnimationForTrack = function (trackIndex) {
-            return this.state.tracks[trackIndex].animation.name;
-        };
-        Spine.prototype.setSkinByName = function (skinName) {
-            var skin = this.skeleton.data.findSkin(skinName);
-            if (!skin) {
-                console.warn("Skin not found: " + skinName);
-                return;
-            }
-            this.skeleton.setSkin(skin);
-        };
-        Spine.prototype.setSkin = function (skin) {
-            this.skeleton.setSkin(skin);
-        };
-        Spine.prototype.setToSetupPose = function () {
-            this.skeleton.setToSetupPose();
-        };
-        Spine.prototype.createCombinedSkin = function (newSkinName) {
-            var skinNames = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                skinNames[_i - 1] = arguments[_i];
-            }
-            if (skinNames.length === 0) {
-                console.warn('Unable to combine skins when no skins are passed...');
-                return;
-            }
-            var newSkin = new spine.Skin(newSkinName);
-            for (var i = 0; i < skinNames.length; i++) {
-                var skinName = skinNames[i];
-                var skin = this.skeleton.data.findSkin(skinName);
-                if (!skin) {
-                    console.warn("Skin not found: " + skinName);
-                    return;
-                }
-                for (var key in skin.attachments) {
-                    var slotKeyPair = key.split(':');
-                    var slotIndex = slotKeyPair[0];
-                    var attachmentName = slotKeyPair[1];
-                    var attachment = skin.attachments[key];
-                    if (undefined === slotIndex || undefined === attachmentName) {
-                        console.warn('something went wrong with reading the attachments index and/or name');
-                        return;
-                    }
-                    if (newSkin.getAttachment(slotIndex, attachmentName) !== undefined) {
-                        console.warn('Found double attachment for: ' + skinName + '. Skipping');
-                        continue;
-                    }
-                    newSkin.addAttachment(slotIndex, attachmentName, attachment);
-                }
-            }
-            this.skeleton.data.skins.push(newSkin);
-            return newSkin;
-        };
-        return Spine;
-    }(Phaser.Group));
-    Spine.globalAutoUpdate = true;
-    PhaserSpine.Spine = Spine;
+	var Spine = (function (_super) {
+		__extends(Spine, _super);
+		function Spine(game, key, scalingVariant) {
+			var _this = _super.call(this, game) || this;
+			_this.imageScale = 1;
+			var data = _this.game.cache.getSpine(key);
+			if (undefined !== scalingVariant && data.variants.indexOf(scalingVariant) !== -1) {
+				_this.imageScale = _this.getScaleFromVariant(scalingVariant);
+			}
+			else if (data.variants && data.variants.length >= 1) {
+				_this.imageScale = _this.getScaleFromVariant(data.variants[0]);
+			}
+			var textureLoader = new PhaserSpine.SpineTextureLoader(game);
+			var spineAtlas = new spine.Atlas(game.cache.getText(data.atlas), textureLoader);
+			var attachmentLoader = new spine.AtlasAttachmentLoader(spineAtlas);
+			var spineJsonParser = new spine.SkeletonJson(attachmentLoader);
+			_this.skeletonData = spineJsonParser.readSkeletonData(game.cache.getJSON(key));
+			if (!_this.skeletonData) {
+				throw new Error('Spine data must be preloaded using Loader.spine');
+			}
+			_this.onEvent = new Phaser.Signal();
+			_this.onComplete = new Phaser.Signal();
+			_this.onEnd = new Phaser.Signal();
+			_this.skeleton = new spine.Skeleton(_this.skeletonData);
+			_this.skeleton.updateWorldTransform();
+			_this.stateData = new spine.AnimationStateData(_this.skeletonData);
+			_this.state = new spine.AnimationState(_this.stateData);
+			_this.state.onEvent = _this.onEvent.dispatch.bind(_this.onEvent);
+			_this.state.onComplete = _this.onComplete.dispatch.bind(_this.onComplete);
+			_this.state.onEnd = _this.onEnd.dispatch.bind(_this.onEnd);
+			_this.slotContainers = [];
+			for (var i = 0, n = _this.skeleton.slots.length; i < n; i++) {
+				var slot = _this.skeleton.slots[i];
+				var attachment = slot.attachment;
+				var slotContainer = new Phaser.Group(game);
+				_this.slotContainers.push(slotContainer);
+				_this.add(slotContainer);
+				if (attachment instanceof spine.RegionAttachment) {
+					var spriteName = attachment.rendererObject.name;
+					var sprite = _this.createSprite(slot, attachment);
+					slot.currentSprite = sprite;
+					slot.currentSpriteName = spriteName;
+					slotContainer.add(sprite);
+				}
+				else if (attachment instanceof spine.WeightedMeshAttachment) {
+					var mesh = _this.createMesh(slot, attachment);
+					slot.currentMesh = mesh;
+					slot.currentMeshName = attachment.name;
+					slotContainer.add(mesh);
+				}
+				else {
+					continue;
+				}
+			}
+			_this.autoUpdate = true;
+			return _this;
+		}
+		Object.defineProperty(Spine.prototype, "autoUpdate", {
+			get: function () {
+				return (this.updateTransform === PhaserSpine.Spine.prototype.autoUpdateTransform);
+			},
+			set: function (value) {
+				this.updateTransform = value ? PhaserSpine.Spine.prototype.autoUpdateTransform : PIXI.DisplayObjectContainer.prototype.updateTransform;
+			},
+			enumerable: true,
+			configurable: true
+		});
+		;
+		;
+		Spine.prototype.getScaleFromVariant = function (variant) {
+			var scale = PhaserSpine.SpinePlugin.RESOLUTION_REGEXP.exec(variant);
+			if (scale) {
+				return parseFloat(scale[1]);
+			}
+			return 1;
+		};
+		Spine.prototype.setTint = function (tint) {
+			this.globalTint = tint;
+			var slots = this.skeleton.slots;
+			for (var i = 0; i < slots.length; i++) {
+				var slot = slots[i];
+				slot.currentSprite.tint = tint;
+			}
+		};
+		Spine.prototype.update = function (dt) {
+			if (dt === undefined) {
+				return;
+			}
+			this.state.update(dt);
+			this.state.apply(this.skeleton);
+			this.skeleton.updateWorldTransform();
+			var drawOrder = this.skeleton.drawOrder;
+			var slots = this.skeleton.slots;
+			for (var i = 0, n = drawOrder.length; i < n; i++) {
+				if (drawOrder[i].currentSprite !== undefined) {
+					this.children[i] = drawOrder[i].currentSprite.parent;
+				}
+			}
+			for (var i = 0, n = slots.length; i < n; i++) {
+				var slot = slots[i];
+				var attachment = slot.attachment;
+				var slotContainer = this.slotContainers[i];
+				if (!attachment) {
+					slotContainer.visible = false;
+					continue;
+				}
+				var type = attachment.type;
+				if (type === spine.AttachmentType.region) {
+					if (attachment.rendererObject) {
+						if (!slot.currentSpriteName || slot.currentSpriteName !== attachment.name) {
+							var spriteName = attachment.rendererObject.name;
+							if (slot.currentSprite !== undefined) {
+								slot.currentSprite.visible = false;
+							}
+							slot.sprites = slot.sprites || {};
+							if (slot.sprites[spriteName] !== undefined) {
+								slot.sprites[spriteName].visible = true;
+							}
+							else {
+								var sprite = this.createSprite(slot, attachment);
+								slotContainer.add(sprite);
+							}
+							slot.currentSprite = slot.sprites[spriteName];
+							slot.currentSpriteName = spriteName;
+						}
+					}
+					var bone = slot.bone;
+					slotContainer.position.x = attachment.x * bone.a + attachment.y * bone.b + bone.worldX;
+					slotContainer.position.y = attachment.x * bone.c + attachment.y * bone.d + bone.worldY;
+					slotContainer.scale.x = bone.getWorldScaleX();
+					slotContainer.scale.y = bone.getWorldScaleY();
+					slotContainer.rotation = (bone.getWorldRotationX() - attachment.rotation) * Math.PI / 180;
+					if (bone.getWorldScaleX() < 0) {
+						slotContainer.scale.x = -slotContainer.scale.x;
+						slotContainer.scale.y = -slotContainer.scale.y;
+					}
+					if (bone.getWorldScaleY() < 0 || bone.getWorldScaleX() < 0) {
+						slotContainer.rotation = -slotContainer.rotation;
+					}
+					slot.currentSprite.blendMode = slot.blendMode;
+					if (!this.globalTint) {
+						slot.currentSprite.tint = slot.currentSprite.tint = parseInt(Phaser.Color.componentToHex(255 * slot.r).substring(0, 2) + Phaser.Color.componentToHex(255 * slot.g).substring(0, 2) + Phaser.Color.componentToHex(255 * slot.b).substring(0, 2), 16);
+					}
+				}
+				else if (type === spine.AttachmentType.weightedmesh || type === spine.AttachmentType.weightedlinkedmesh) {
+					if (!slot.currentMeshName || slot.currentMeshName !== attachment.name) {
+						var meshName = attachment.name;
+						if (slot.currentMesh !== undefined) {
+							slot.currentMesh.visible = false;
+						}
+						slot.meshes = slot.meshes || {};
+						if (slot.meshes[meshName] !== undefined) {
+							slot.meshes[meshName].visible = true;
+						}
+						else {
+							var mesh = this.createMesh(slot, attachment);
+							slotContainer.add(mesh);
+						}
+						slot.currentMesh = slot.meshes[meshName];
+						slot.currentMeshName = meshName;
+					}
+					attachment.computeWorldVertices(slot.bone.skeleton.x, slot.bone.skeleton.y, slot, slot.currentMesh.vertices);
+				}
+				else {
+					slotContainer.visible = false;
+					continue;
+				}
+				slotContainer.visible = true;
+				slotContainer.alpha = slot.a;
+			}
+		};
+		Spine.prototype.destroy = function (destroyChildren, soft) {
+			_super.prototype.destroy.call(this, true, soft);
+		};
+		Spine.prototype.autoUpdateTransform = function () {
+			if (Spine.globalAutoUpdate) {
+				this.lastTime = this.lastTime || Date.now();
+				var timeDelta = (Date.now() - this.lastTime) * 0.001;
+				this.lastTime = Date.now();
+				this.update(timeDelta);
+			}
+			else {
+				this.lastTime = 0;
+			}
+			PIXI.DisplayObjectContainer.prototype.updateTransform.call(this);
+		};
+		;
+		Spine.prototype.createSprite = function (slot, attachment) {
+			var descriptor = attachment.rendererObject;
+			var baseTexture = descriptor.page.rendererObject;
+			var spriteRect = new PIXI.Rectangle(descriptor.x, descriptor.y, descriptor.rotate ? descriptor.height : descriptor.width, descriptor.rotate ? descriptor.width : descriptor.height);
+			var spriteTexture = new PIXI.Texture(baseTexture, spriteRect);
+			var sprite = new Phaser.Sprite(this.game, 0, 0, spriteTexture);
+			var baseRotation = descriptor.rotate ? Math.PI * 0.5 : 0.0;
+			sprite.scale.x = attachment.scaleX / this.imageScale;
+			sprite.scale.y = attachment.scaleY / this.imageScale;
+			sprite.rotation = baseRotation;
+			sprite.anchor.x = (0.5 * descriptor.originalWidth - descriptor.offsetX) / descriptor.width;
+			sprite.anchor.y = 1.0 - ((0.5 * descriptor.originalHeight - descriptor.offsetY) / descriptor.height);
+			sprite.alpha = attachment.a;
+			if (descriptor.rotate) {
+				var x1 = sprite.scale.x;
+				sprite.scale.x = sprite.scale.y;
+				sprite.scale.y = x1;
+				sprite.anchor.x = 1.0 - ((0.5 * descriptor.originalHeight - descriptor.offsetY) / descriptor.height);
+				sprite.anchor.y = 1.0 - ((0.5 * descriptor.originalWidth - descriptor.offsetX) / descriptor.width);
+			}
+			slot.sprites = slot.sprites || {};
+			slot.sprites[descriptor.name] = sprite;
+			return sprite;
+		};
+		;
+		Spine.prototype.createMesh = function (slot, attachment) {
+			var descriptor = attachment.rendererObject;
+			var baseTexture = descriptor.page.rendererObject;
+			var texture = new PIXI.Texture(baseTexture);
+			var strip = new Phaser.Rope(this.game, 0, 0, texture);
+			strip.drawMode = 1;
+			strip.canvasPadding = 1.5;
+			strip.vertices = new spine.Float32Array(attachment.uvs.length);
+			strip.uvs = attachment.uvs;
+			strip.indices = attachment.triangles;
+			strip.alpha = attachment.a;
+			slot.meshes = slot.meshes || {};
+			slot.meshes[attachment.name] = strip;
+			return strip;
+		};
+		;
+		Spine.prototype.setMixByName = function (fromName, toName, duration) {
+			this.stateData.setMixByName(fromName, toName, duration);
+		};
+		;
+		Spine.prototype.setAnimationByName = function (trackIndex, animationName, loop) {
+			if (loop === void 0) { loop = false; }
+			var animation = this.state.data.skeletonData.findAnimation(animationName);
+			if (!animation) {
+				console.warn("Animation not found: " + animationName);
+				return null;
+			}
+			return this.state.setAnimation(trackIndex, animation, loop);
+		};
+		;
+		Spine.prototype.addAnimationByName = function (trackIndex, animationName, loop, delay) {
+			if (loop === void 0) { loop = false; }
+			if (delay === void 0) { delay = 0; }
+			var animation = this.state.data.skeletonData.findAnimation(animationName);
+			if (!animation) {
+				console.warn("Animation not found: " + animationName);
+				return null;
+			}
+			return this.state.addAnimation(trackIndex, animation, loop, delay);
+		};
+		;
+		Spine.prototype.getCurrentAnimationForTrack = function (trackIndex) {
+			return this.state.tracks[trackIndex].animation.name;
+		};
+		Spine.prototype.setSkinByName = function (skinName) {
+			var skin = this.skeleton.data.findSkin(skinName);
+			if (!skin) {
+				console.warn("Skin not found: " + skinName);
+				return;
+			}
+			this.skeleton.setSkin(skin);
+		};
+		Spine.prototype.setSkin = function (skin) {
+			this.skeleton.setSkin(skin);
+		};
+		Spine.prototype.setToSetupPose = function () {
+			this.skeleton.setToSetupPose();
+		};
+		Spine.prototype.createCombinedSkin = function (newSkinName) {
+			var skinNames = [];
+			for (var _i = 1; _i < arguments.length; _i++) {
+				skinNames[_i - 1] = arguments[_i];
+			}
+			if (skinNames.length === 0) {
+				console.warn('Unable to combine skins when no skins are passed...');
+				return;
+			}
+			var newSkin = new spine.Skin(newSkinName);
+			for (var i = 0; i < skinNames.length; i++) {
+				var skinName = skinNames[i];
+				var skin = this.skeleton.data.findSkin(skinName);
+				if (!skin) {
+					console.warn("Skin not found: " + skinName);
+					return;
+				}
+				for (var key in skin.attachments) {
+					var slotKeyPair = key.split(':');
+					var slotIndex = slotKeyPair[0];
+					var attachmentName = slotKeyPair[1];
+					var attachment = skin.attachments[key];
+					if (undefined === slotIndex || undefined === attachmentName) {
+						console.warn('something went wrong with reading the attachments index and/or name');
+						return;
+					}
+					if (newSkin.getAttachment(slotIndex, attachmentName) !== undefined) {
+						console.warn('Found double attachment for: ' + skinName + '. Skipping');
+						continue;
+					}
+					newSkin.addAttachment(slotIndex, attachmentName, attachment);
+				}
+			}
+			this.skeleton.data.skins.push(newSkin);
+			return newSkin;
+		};
+		return Spine;
+	}(Phaser.Group));
+	Spine.globalAutoUpdate = true;
+	PhaserSpine.Spine = Spine;
 })(PhaserSpine || (PhaserSpine = {}));
 var PhaserSpine;
 (function (PhaserSpine) {
-    var SpineTextureLoader = (function () {
-        function SpineTextureLoader(game) {
-            this.load = function (page, file, atlas) {
-                var image = this.game.make.image(0, 0, file);
-                page.rendererObject = image.texture.baseTexture;
-            };
-            this.unload = function (texture) {
-                texture.destroy();
-            };
-            this.game = game;
-        }
-        return SpineTextureLoader;
-    }());
-    PhaserSpine.SpineTextureLoader = SpineTextureLoader;
+	var SpineTextureLoader = (function () {
+		function SpineTextureLoader(game) {
+			this.load = function (page, file, atlas) {
+				var image = this.game.make.image(0, 0, file);
+				page.rendererObject = image.texture.baseTexture;
+			};
+			this.unload = function (texture) {
+				texture.destroy();
+			};
+			this.game = game;
+		}
+		return SpineTextureLoader;
+	}());
+	PhaserSpine.SpineTextureLoader = SpineTextureLoader;
 })(PhaserSpine || (PhaserSpine = {}));
+module.exports = PhaserSpine.SpinePlugin;
 //# sourceMappingURL=phaser-spine.js.map
-module.exports = PhaserSpine;
