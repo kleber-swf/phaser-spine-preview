@@ -91,7 +91,7 @@ export class Preview {
 
 		this.anim = game.add.spine(0, 0, KEY);
 		group.add(this.anim);
-
+		this._selectedAnimation = null;
 		this.onFileLoaded.dispatch(this.getAnimFilename(), this.anim.skeletonData.animations);
 	}
 
@@ -99,12 +99,12 @@ export class Preview {
 
 	private getAnimFilename() {
 		const fileUrl = this.currAnimUrl;
+		if (!fileUrl) return '';
 		const filename = fileUrl.substr(Constants.protocol.length).substr(0);
 		return filename.substr(0, filename.length - 5);
 	}
 
 	public selectAnim(animName: string) {
-		console.log(this.anim);
 		this._selectedAnimation = animName;
 		if (animName) {
 			this.anim.setAnimationByName(0, animName, true);

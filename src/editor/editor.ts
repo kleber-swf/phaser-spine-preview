@@ -6,8 +6,11 @@ import { Constants } from '../constants';
 import { Events } from '../events';
 
 export class Editor {
+	private currentFilename: string;
+
 	constructor(private readonly mainWindow: BrowserWindow) {
 		ipcMain.addListener(Events.OPEN_FILE_REQUEST, (event) => this.openFileDialog(event));
+		ipcMain.addListener(Events.RELOAD_FILE_REQUEST, (event) => this.reloadCurrentFile(event));
 	}
 
 	private openFileDialog(event: IpcMainEvent) {
@@ -19,9 +22,18 @@ export class Editor {
 		});
 		if (!files?.length) return;
 
-		const filename = files[0];
+		const filename = this.currentFilename = files[0];
 		this.copyFiles(filename).then(() =>
 			event.reply(Events.OPEN_FILE_REPLY,
+				Constants.createUrl(path.basename(filename)))
+		);
+	}
+
+	private reloadCurrentFile(event: IpcMainEvent) {
+		if (!this.currentFilename) return;
+		const filename = this.currentFilename;
+		this.copyFiles(filename).then(() =>
+			event.reply(Events.RELOAD_FILE_REPLY,
 				Constants.createUrl(path.basename(filename)))
 		);
 	}

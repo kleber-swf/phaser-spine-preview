@@ -22,6 +22,8 @@ body, .button {
   margin: 20px;
 }
 
+.invisible { display: none !important; }
+
 .panel {
   padding: 16px;
   background-color: rgba(32, 37, 41, 0.4);

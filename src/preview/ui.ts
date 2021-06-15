@@ -5,22 +5,28 @@ import { Preview } from './preview';
 
 export class UI {
 	private readonly actionsPanel: HTMLElement;
+	private readonly reloadButton: HTMLElement;
 	private readonly fileNameLabel: HTMLElement;
 	private readonly animNameLabel: HTMLElement;
+
 	private animPanel: HTMLElement;
 
 	constructor(private readonly preview: Preview) {
 		this.actionsPanel = document.getElementById('action-panel');
+		this.reloadButton = document.getElementById('reload-button');
 		this.fileNameLabel = document.getElementById('file-name');
 		this.animNameLabel = document.getElementById('animation-name');
 		preview.onFileLoaded.add(this.onFileLoaded, this);
 
 		const loadButton = document.getElementById('load-button');
 		loadButton.addEventListener('click', () => ipcRenderer.send(Events.OPEN_FILE_REQUEST));
+		this.reloadButton.addEventListener('click', () => ipcRenderer.send(Events.RELOAD_FILE_REQUEST));
 	}
 
 	public onFileLoaded(filename: string, animations: SpineAnimation[]) {
-		console.log(animations);
+		this.reloadButton.classList.remove('invisible');
+		this.fileNameLabel.textContent = filename;
+		this.animNameLabel.textContent = '';
 
 		if (this.animPanel) this.actionsPanel.removeChild(this.animPanel);
 
@@ -34,7 +40,6 @@ export class UI {
 		animPanel.appendChild(title);
 		this.actionsPanel.appendChild(animPanel);
 
-		this.fileNameLabel.textContent = filename;
 
 		animations.forEach(anim => {
 			const el = this.createButton(anim.name, () => this.selectAnimation(el, anim.name));

@@ -13,3 +13,6 @@ new UI(preview);
 
 ipcRenderer.on(Events.OPEN_FILE_REPLY,
 	(_event: IpcRendererEvent, file: string) => preview.loadFile(file));
+
+ipcRenderer.on(Events.RELOAD_FILE_REPLY,
+	(_event: IpcRendererEvent, file: string) => preview.loadFile(file));
