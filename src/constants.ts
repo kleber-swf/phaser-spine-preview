@@ -1,5 +1,4 @@
 import path from 'path';
-import fs from 'fs';
 import { app } from 'electron';
 
 class ConstantsClass {
@@ -8,9 +7,7 @@ class ConstantsClass {
 	public staticDir: string;
 
 	setup() {
-		const dir = path.join(app.getPath('userData'), 'static');
-		fs.mkdirSync(dir, { recursive: true });
-		this.staticDir = dir;
+		this.staticDir = path.join(app.getPath('userData'), 'static');
 	}
 
 	createUrl(filePath: string) { return `${this.protocol}${filePath}`; }

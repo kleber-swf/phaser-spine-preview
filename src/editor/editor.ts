@@ -27,16 +27,26 @@ export class Editor {
 	}
 
 	private async copyFiles(jsonFilePath: string): Promise<void> {
+		await this.recreateFolder();
+
 		const folder = Constants.staticDir;
 		const jsonFileName = path.basename(jsonFilePath);
 
 		const baseFileName = jsonFileName.substr(0, jsonFileName.length - '.json'.length);
 		const baseFilePath = jsonFilePath.substr(0, jsonFilePath.length - '.json'.length);
 
+
 		await Promise.all([
 			fs.copyFile(jsonFilePath, path.join(folder, jsonFileName)),
 			fs.copyFile(`${baseFilePath}.atlas`, path.join(folder, `${baseFileName}.atlas`)),
 			fs.copyFile(`${baseFilePath}.png`, path.join(folder, `${baseFileName}.png`)),
 		])
+	}
+
+	private async recreateFolder() {
+		const folder = Constants.staticDir;
+		try { await fs.rmdir(folder); }
+		catch (e) { }
+		await fs.mkdir(folder, { recursive: true });
 	}
 }
