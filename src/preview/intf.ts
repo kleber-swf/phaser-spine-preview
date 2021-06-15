@@ -15,6 +15,7 @@ export interface IGameObjectCreator extends Phaser.GameObjectFactory {
 export interface Spine extends Phaser.Group {
 	setAnimationByName(trackIndex: number, animationName: string, loop: boolean): void;
 	skeletonData: SkeletonData;
+	state: AnimationState;
 }
 
 export interface SkeletonData {
@@ -22,5 +23,9 @@ export interface SkeletonData {
 }
 
 export interface SpineAnimation {
-	id: string;
+	name: string;
+}
+
+export interface AnimationState {
+	timeScale: number;
 }

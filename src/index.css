@@ -1,5 +1,4 @@
-html, body, #game {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+html, body, #game, #ui {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -7,8 +6,89 @@ html, body, #game {
   display: flex;
 }
 
-button#load-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
+body, .button {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Ubuntu", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
 }
+
+#ui {
+  position: absolute;
+  background-color: transparent;
+  justify-content: start;
+  align-items: flex-start;
+}
+
+#ui #action-panel {
+  margin: 20px;
+}
+
+.panel {
+  padding: 16px;
+  background-color: rgba(32, 37, 41, 0.4);
+  border-radius: 10px;
+  color: #F3F5F8;
+  text-align: center;
+}
+
+.panel>.title {
+  font-style: italic;
+  color: rgba(243, 245, 248, 0.5);
+  padding-bottom: 10px;
+  user-select: none;
+}
+
+.panel+.panel{
+  margin-top:20px;
+}
+
+.button {
+  padding: 10px 20px;
+  text-align: center;
+  background-color: #4C555C;
+  border: 1px solid #32383D;
+  color: #F3F5F8;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.1s;
+}
+
+.button:hover {
+  background-color: #32383D;
+}
+
+.button.selected {
+  background-color: #1EA8C9;
+}
+
+.button.stop {
+  margin-top: 5px;
+  background-color: #BF1755;
+}
+
+.button.stop:hover {
+  background-color: #A6143B
+}
+
+#animation-name, #file-name {
+  font-size: 24px;
+  font-weight: bold;
+  color:#F3F5F8;
+  text-align: center;
+  opacity: 1;
+  transition: opacity 0.1s;
+}
+
+#animation-name:hover, #file-name:hover {
+  opacity: 0.1;
+}
+
+div.center {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.top { top: 10px; }
+.bottom { bottom: 10px; }

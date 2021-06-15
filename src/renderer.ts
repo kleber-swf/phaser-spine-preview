@@ -1,16 +1,15 @@
 import 'p2';
 import 'pixi';
 import 'phaser-ce';
-import './index.css';
-import { Preview } from './preview/preview';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { Events } from './events';
+import { Preview } from './preview/preview';
 
-// Create and configure Preview
+import './index.css';
+import { UI } from './preview/ui';
+
 const preview = new Preview();
-ipcRenderer.on(Events.OPEN_FILE_REPLY, (_event: IpcRendererEvent, file: string) => preview.loadFile(file));
+new UI(preview);
 
-
-// Buttons event listeners
-const loadButton = document.getElementById('load-button');
-loadButton.addEventListener('click', () => ipcRenderer.send(Events.OPEN_FILE_REQUEST));
+ipcRenderer.on(Events.OPEN_FILE_REPLY,
+	(_event: IpcRendererEvent, file: string) => preview.loadFile(file));

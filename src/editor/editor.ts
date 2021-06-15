@@ -1,9 +1,9 @@
-import { app, BrowserWindow, dialog, ipcMain } from 'electron';
-import path from 'path';
-import { promises as fs } from 'fs';
+import { BrowserWindow, dialog, ipcMain } from 'electron';
 import { IpcMainEvent } from 'electron/main';
-import { Events } from '../events';
+import { promises as fs } from 'fs';
+import path from 'path';
 import { Constants } from '../constants';
+import { Events } from '../events';
 
 export class Editor {
 	constructor(private readonly mainWindow: BrowserWindow) {
@@ -17,7 +17,7 @@ export class Editor {
 				name: 'JSON Files', extensions: ['json']
 			}]
 		});
-		if (files.length < 1) return;
+		if (!files?.length) return;
 
 		const filename = files[0];
 		this.copyFiles(filename).then(() =>

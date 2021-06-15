@@ -1,16 +1,22 @@
 import { IGame, Spine } from './intf';
 
 import SpinePlugin from '../plugins/phaser-spine';
+import { Constants } from '../constants';
 
 const KEY = 'anim';
 const GRID_DISTANCE = 10;
 
 export class Preview {
+	private readonly game: IGame
+
 	private anim: Spine;
+	private currAnimUrl: string;
 	private group: Phaser.Group;
 	private grid: Phaser.Graphics;
+	private _selectedAnimation: string;
 
-	private readonly game: IGame
+	public readonly onFileLoaded = new Phaser.Signal();
+
 	constructor() {
 		this.game = new Phaser.Game({
 			width: 1920,
@@ -67,6 +73,7 @@ export class Preview {
 	}
 
 	public loadFile(fileUrl: string) {
+		this.currAnimUrl = fileUrl;
 		const load = this.game.load;
 		load.removeAll();
 		load.spine(KEY, fileUrl);
@@ -82,8 +89,27 @@ export class Preview {
 			this.anim.destroy(true, false);
 		}
 
-		const anim = this.anim = game.add.spine(0, 0, KEY);
-		group.add(anim);
-		anim.setAnimationByName(0, 'idle', true);
+		this.anim = game.add.spine(0, 0, KEY);
+		group.add(this.anim);
+
+		this.onFileLoaded.dispatch(this.getAnimFilename(), this.anim.skeletonData.animations);
+	}
+
+	public getSelectedAnim() { return this._selectedAnimation; }
+
+	private getAnimFilename() {
+		const fileUrl = this.currAnimUrl;
+		const filename = fileUrl.substr(Constants.protocol.length).substr(0);
+		return filename.substr(0, filename.length - 5);
+	}
+
+	public selectAnim(animName: string) {
+		console.log(this.anim);
+		this._selectedAnimation = animName;
+		if (animName) {
+			this.anim.setAnimationByName(0, animName, true);
+			this.anim.state.timeScale = 1;
+		} else
+			this.anim.state.timeScale = 0;
 	}
 }
