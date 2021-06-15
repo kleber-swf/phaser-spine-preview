@@ -40,7 +40,6 @@ export class UI {
 		animPanel.appendChild(title);
 		this.actionsPanel.appendChild(animPanel);
 
-
 		animations.forEach(anim => {
 			const el = this.createButton(anim.name, () => this.selectAnimation(el, anim.name));
 			animPanel.appendChild(el);

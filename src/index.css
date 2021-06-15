@@ -18,10 +18,6 @@ body, .button {
   align-items: flex-start;
 }
 
-#ui #action-panel {
-  margin: 20px;
-}
-
 .invisible { display: none !important; }
 
 .panel {
@@ -92,5 +88,28 @@ div.center {
   text-align: center;
 }
 
-.top { top: 10px; }
-.bottom { bottom: 10px; }
+div.left {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: stretch;
+  margin: 20px;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+
+div.right {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+div.top { top: 10px; }
+div.bottom { bottom: 10px; }
