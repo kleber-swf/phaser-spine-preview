@@ -28,4 +28,5 @@ module.exports = [
   { test: /pixi\.js/, use: ['expose-loader?PIXI'] },
   { test: /phaser-split\.js$/, use: ['expose-loader?Phaser'] },
   { test: /p2\.js/, use: ['expose-loader?p2'] },
+  { test: /phaser-spine\.js/, use: ['expose-loader?PhaserSpine'] },
 ];

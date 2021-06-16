@@ -1,6 +1,7 @@
 import 'p2';
 import 'pixi';
 import 'phaser-ce';
+import '@k3n/phaser-spine';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { Events } from './events';
 import { Preview } from './preview/preview';

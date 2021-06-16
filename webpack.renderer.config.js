@@ -22,6 +22,7 @@ module.exports = {
       'phaser-ce': path.join(phaserModule, 'phaser-split.js'),
       'pixi': path.join(phaserModule, 'pixi.js'),
       'p2': path.join(phaserModule, 'p2.js'),
+      '@k3n/phaser-spine': path.join(__dirname, 'node_modules/@k3n/phaser-spine/build/phaser-spine-webpack.js'),
     },
   },
   output: {

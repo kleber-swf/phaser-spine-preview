@@ -81,7 +81,7 @@
     "typescript": "^4.0.2"
   },
   "dependencies": {
-    "@orange-games/phaser-spine": "^3.0.9",
+    "@k3n/phaser-spine": "^3.0.9-b",
     "electron-squirrel-startup": "^1.0.0",
     "phaser-ce": "^2.18.0"
   }

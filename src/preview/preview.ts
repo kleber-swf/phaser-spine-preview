@@ -1,7 +1,7 @@
+import { Constants } from '../constants';
 import { IGame, Spine } from './intf';
 
-import SpinePlugin from '../plugins/phaser-spine';
-import { Constants } from '../constants';
+const SpinePlugin = require('@k3n/phaser-spine');
 
 const KEY = 'anim';
 const GRID_DISTANCE = 10;
