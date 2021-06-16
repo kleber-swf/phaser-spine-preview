@@ -11,7 +11,7 @@ export class Preview {
 
 	private anim: Spine;
 	private currAnimUrl: string;
-	private group: Phaser.Group;
+	private group: Phaser.Graphics;
 	private grid: Phaser.Graphics;
 	private _selectedAnimation: string;
 
@@ -34,11 +34,10 @@ export class Preview {
 		game.add.plugin(SpinePlugin);
 		game.load.onLoadComplete.add(this.onLoadComplete, this);
 	}
-	
+
 	public create() {
 		const game = this.game;
-		
-		this.group = game.add.group();
+		this.group = this._createGroup();
 
 		game.stage.disableVisibilityChange = true;
 		game.scale.onSizeChange.add(this._onResize, this);
@@ -51,14 +50,14 @@ export class Preview {
 	}
 
 	private _drawGrid() {
-		if (!this.grid) {
-			this.grid = new Phaser.Graphics(this.game, 0, 0);
-			this.game.world.addChildAt(this.grid, 0);
-		}
+		if (!this.grid) this.grid = this._createGrid();
+
 		const grid = this.grid;
 		const { width, height } = this.game;
 
-		grid.clear();
+		grid.clear()
+			.beginFill(0, 0)
+			.drawRect(0, 0, width, height);
 
 		let x = 0;
 		do {
@@ -77,6 +76,20 @@ export class Preview {
 		} while (y <= height);
 	}
 
+	private _createGroup() {
+		const group = this.game.add.graphics();
+		group.inputEnabled = true;
+		group.input.draggable = true;
+		this.game.canvas.onscroll = (...e: any[]) => console.log(e);
+		return group;
+	}
+
+	private _createGrid() {
+		const grid = new Phaser.Graphics(this.game, 0, 0);
+		this.game.world.addChildAt(grid, 0);
+		return grid;
+	}
+
 	public loadFile(fileUrl: string) {
 		this.currAnimUrl = fileUrl;
 		const load = this.game.load;
@@ -90,12 +103,13 @@ export class Preview {
 		const group = this.group;
 
 		if (this.anim) {
-			group.removeAll();
+			group.removeChildren();
 			this.anim.destroy(true, false);
 		}
 
 		this.anim = game.add.spine(0, 0, KEY);
-		group.add(this.anim);
+		group.addChild(this.anim);
+
 		this._selectedAnimation = null;
 		this.onFileLoaded.dispatch(this.getAnimFilename(), this.anim.skeletonData.animations);
 	}

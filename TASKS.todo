@@ -2,6 +2,6 @@
 	[x] window position
 	[x] window state
 	[x] last path opened
-[ ] pan
+[x] pan
 [ ] zoom
 [ ] better animation controls
