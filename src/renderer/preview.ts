@@ -34,9 +34,10 @@ export class Preview {
 		game.add.plugin(SpinePlugin);
 		game.load.onLoadComplete.add(this.onLoadComplete, this);
 	}
-
+	
 	public create() {
 		const game = this.game;
+		
 		this.group = game.add.group();
 
 		game.stage.disableVisibilityChange = true;
@@ -50,7 +51,10 @@ export class Preview {
 	}
 
 	private _drawGrid() {
-		if (!this.grid) this.grid = this.game.add.graphics(0, 0);
+		if (!this.grid) {
+			this.grid = new Phaser.Graphics(this.game, 0, 0);
+			this.game.world.addChildAt(this.grid, 0);
+		}
 		const grid = this.grid;
 		const { width, height } = this.game;
 
