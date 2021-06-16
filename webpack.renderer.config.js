@@ -23,6 +23,8 @@ module.exports = {
       'pixi': path.join(phaserModule, 'pixi.js'),
       'p2': path.join(phaserModule, 'p2.js'),
     },
-    // fallback: { "path": require.resolve("path-browserify") }
+  },
+  output: {
+    publicPath: './../',
   },
 };

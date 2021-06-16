@@ -1,20 +1,22 @@
 {
-  "name": "spine-preview",
-  "productName": "spine-preview",
+  "name": "phaser-spine-preview",
+  "productName": "phaser-spine-preview",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Phaser Spine Preview",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts ."
+    "lint": "eslint --ext .ts .",
+    "pack-win": "electron-packager --out=./out --platform=win32 .",
+    "pack-linux": "electron-packager --out=./out --platform=linux ."
   },
   "keywords": [],
   "author": {
     "name": "Kleber Silva",
-    "email": "kleber@jogoglobal.com"
+    "email": "kleber.swf@gmail.com"
   },
   "license": "MIT",
   "config": {
@@ -24,21 +26,15 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "spine_preview"
+            "name": "PhaserSpinePreview",
+            "authors": "Kleber Silva",
+            "cretificateFile": "./ssl/server.csr",
+            "exe": "PhaserSpinePreview.exe",
+            "noMsi": true
           }
         },
         {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
           "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
           "config": {}
         }
       ],
@@ -74,6 +70,7 @@
     "@typescript-eslint/parser": "^4.0.1",
     "css-loader": "^5.0.0",
     "electron": "13.1.2",
+    "electron-packager": "^15.2.0",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "^2.20.0",
     "expose-loader": "^0.7.3",

@@ -41,6 +41,7 @@ export class Preview {
 
 		game.stage.disableVisibilityChange = true;
 		game.scale.onSizeChange.add(this._onResize, this);
+		this._onResize(null, game.width, game.height);
 	}
 
 	private _onResize(_: any, w: number, h: number) {
