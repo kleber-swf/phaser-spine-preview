@@ -74,13 +74,14 @@ export class Preview {
 				.lineTo(width, y);
 			y += GRID_DISTANCE;
 		} while (y <= height);
+
+		grid.cacheAsBitmap = true;
 	}
 
 	private _createGroup() {
 		const group = this.game.add.graphics();
 		group.inputEnabled = true;
 		group.input.draggable = true;
-		this.game.canvas.onscroll = (...e: any[]) => console.log(e);
 		return group;
 	}
 
