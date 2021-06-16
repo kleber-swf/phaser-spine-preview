@@ -4,10 +4,10 @@ import 'phaser-ce';
 import '@k3n/phaser-spine';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { Events } from './events';
-import { Preview } from './preview/preview';
+import { Preview } from './renderer/preview';
 
 import './index.css';
-import { UI } from './preview/ui';
+import { UI } from './renderer/ui';
 
 const preview = new Preview();
 new UI(preview);
