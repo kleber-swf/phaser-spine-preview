@@ -1,6 +1,7 @@
-[ ] save preferences
-	[ ] window position
-	[ ] window state
-	[ ] last path opened
+[x] save preferences
+	[x] window position
+	[x] window state
+	[x] last path opened
 [ ] pan
 [ ] zoom
+[ ] better animation controls

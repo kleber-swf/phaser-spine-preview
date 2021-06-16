@@ -1,6 +1,6 @@
 import electron from 'electron';
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
 
 export class Prefs {
 	private static _instance: Prefs;
@@ -33,7 +33,6 @@ export class Prefs {
 	}
 
 	private save() {
-		console.log(this.data);
 		fs.writeFileSync(this.path, JSON.stringify(this.data));
 	}
 
