@@ -15,9 +15,15 @@ export class Preview {
 	private currAnimUrl: string;
 	private group: Phaser.Graphics;
 	private grid: Phaser.Graphics;
+	private pivot: Phaser.Graphics;
 	private _selectedAnimation: string;
 
 	private _backgroundColor = AVAILABLE_BG_COLORS[0];
+	private _showPivot = true;
+
+	private _dragOffset = new Phaser.Point();
+	private _isDragging = false;
+
 	public get backgroundColor() { return this._backgroundColor; }
 
 	public set backgroundColor(color: number) {
@@ -50,6 +56,7 @@ export class Preview {
 		this.group = this._createGroup();
 
 		game.input.keyboard.addKey(Phaser.KeyCode.R).onDown.add(this.reset, this);
+		game.input.keyboard.addKey(Phaser.KeyCode.P).onDown.add(this.togglePivot, this);
 
 		game.stage.disableVisibilityChange = true;
 		game.scale.onSizeChange.add(this._drawGrid, this);
@@ -77,6 +84,31 @@ export class Preview {
 		grid.cacheAsBitmap = true;
 	}
 
+	private _drawPivot() {
+		if (!(this._showPivot && this.anim)) {
+			if (this.pivot) this.group.removeChild(this.pivot);
+			return;
+		}
+
+		if (!this.pivot) {
+			const l = 10;
+			this.pivot = new Phaser.Graphics(this.game)
+				.lineStyle(4, 0x000000, 0.3)
+				.drawCircle(0, 0, l)
+				.moveTo(0, -l - 1)
+				.lineTo(0, l + 1)
+				.moveTo(-l - 1, 0)
+				.lineTo(l + 1, 0)
+				.lineStyle(2, 0xFFFFFF)
+				.drawCircle(0, 0, l)
+				.moveTo(0, -l)
+				.lineTo(0, l)
+				.moveTo(-l, 0)
+				.lineTo(l, 0);
+		}
+		this.group.addChild(this.pivot);
+	}
+
 	private _createGroup() {
 		return this.game.add.graphics(this.game.width * 0.5, this.game.height * 0.5);
 	}
@@ -98,9 +130,6 @@ export class Preview {
 
 		return grid;
 	}
-
-	private _dragOffset = new Phaser.Point();
-	private _isDragging = false;
 
 	private _onDragStart(_: any, pointer: Phaser.Pointer) {
 		if (!this.anim) return;
@@ -140,6 +169,7 @@ export class Preview {
 		this.anim = game.add.spine(0, 0, KEY);
 		group.addChild(this.anim);
 		this.reset();
+		this._drawPivot();
 
 		this._selectedAnimation = null;
 		this.onFileLoaded.dispatch(this.getAnimFilename(), this.anim.skeletonData.animations);
@@ -165,16 +195,21 @@ export class Preview {
 
 	public zoom(delta: number) {
 		if (!this.anim) return;
-		const s = Math.max(0.1, Math.min(10, this.group.scale.x + delta * -0.005));
-		this.group.scale.set(s, s);
+		const s = Math.max(0.1, Math.min(10, this.anim.scale.x + delta * -0.005));
+		this.anim.scale.set(s, s);
 	}
 
 	public reset() {
 		this.group.position.set(this.game.width * 0.5, this.game.height * 0.5);
-		this.group.scale.set(1, 1);
+		if (this.anim) this.anim.scale.set(1, 1);
 		if (!this.anim) return;
 		this.game.add.tween(this.group)
 			.from({ alpha: 0 }, 250, Phaser.Easing.Sinusoidal.Out, true, 250);
+	}
+
+	public togglePivot() {
+		this._showPivot = !this._showPivot;
+		this._drawPivot();
 	}
 
 	public setBackgroundColor(color: number) {
