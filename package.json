@@ -11,7 +11,8 @@
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts .",
     "pack-win": "electron-packager --out=./out --platform=win32 .",
-    "pack-linux": "electron-packager --out=./out --platform=linux ."
+    "pack-linux": "electron-packager --out=./out --platform=linux .",
+    "build": "bash ./scripts/build.sh"
   },
   "keywords": [],
   "author": {
