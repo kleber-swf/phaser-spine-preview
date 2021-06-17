@@ -49,6 +49,8 @@ export class Preview {
 		const game = this.game;
 		this.group = this._createGroup();
 
+		game.input.keyboard.addKey(Phaser.KeyCode.R).onDown.add(this.reset, this);
+
 		game.stage.disableVisibilityChange = true;
 		game.scale.onSizeChange.add(this._drawGrid, this);
 		this._drawGrid();
@@ -137,6 +139,7 @@ export class Preview {
 
 		this.anim = game.add.spine(0, 0, KEY);
 		group.addChild(this.anim);
+		this.reset();
 
 		this._selectedAnimation = null;
 		this.onFileLoaded.dispatch(this.getAnimFilename(), this.anim.skeletonData.animations);
@@ -164,6 +167,14 @@ export class Preview {
 		if (!this.anim) return;
 		const s = Math.max(0.1, Math.min(10, this.group.scale.x + delta * -0.005));
 		this.group.scale.set(s, s);
+	}
+
+	public reset() {
+		this.group.position.set(this.game.width * 0.5, this.game.height * 0.5);
+		this.group.scale.set(1, 1);
+		if (!this.anim) return;
+		this.game.add.tween(this.group)
+			.from({ alpha: 0 }, 250, Phaser.Easing.Sinusoidal.Out, true, 250);
 	}
 
 	public setBackgroundColor(color: number) {

@@ -5,5 +5,5 @@
 [x] pan
 [x] zoom
 [ ] better animation controls
-[ ] reset scale and position
+[x] reset scale and position
 [ ] show pivot
