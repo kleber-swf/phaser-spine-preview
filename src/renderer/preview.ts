@@ -4,7 +4,9 @@ import { IGame, Spine } from './intf';
 const SpinePlugin = require('@k3n/phaser-spine');
 
 const KEY = 'anim';
-const GRID_DISTANCE = 10;
+const CELL_SIZE = 25;
+
+export const AVAILABLE_BG_COLORS = [0x222222, 0x555555, 0xFFFFFF];
 
 export class Preview {
 	private readonly game: IGame
@@ -14,6 +16,8 @@ export class Preview {
 	private group: Phaser.Graphics;
 	private grid: Phaser.Graphics;
 	private _selectedAnimation: string;
+
+	private _backgroundColor = AVAILABLE_BG_COLORS[0];
 
 	public readonly onFileLoaded = new Phaser.Signal();
 
@@ -32,7 +36,7 @@ export class Preview {
 	public preload() {
 		const game = this.game;
 		game.add.plugin(SpinePlugin);
-		game.load.onLoadComplete.add(this.onLoadComplete, this);
+		game.load.onLoadComplete.add(this.addAnimToStage, this);
 	}
 
 	public create() {
@@ -40,12 +44,7 @@ export class Preview {
 		this.group = this._createGroup();
 
 		game.stage.disableVisibilityChange = true;
-		game.scale.onSizeChange.add(this._onResize, this);
-		this._onResize(null, game.width, game.height);
-	}
-
-	private _onResize(_: any, w: number, h: number) {
-		this.group.position.set(w * 0.5, h * 0.5);
+		game.scale.onSizeChange.add(this._drawGrid, this);
 		this._drawGrid();
 	}
 
@@ -55,40 +54,62 @@ export class Preview {
 		const grid = this.grid;
 		const { width, height } = this.game;
 
-		grid.clear()
-			.beginFill(0, 0)
-			.drawRect(0, 0, width, height);
+		grid.clear().beginFill(this._backgroundColor);
+		const cols = Math.ceil(width / CELL_SIZE);
+		const rows = Math.ceil(height / CELL_SIZE);
 
-		let x = 0;
-		do {
-			grid.lineStyle(1, 0xFFFFFF, x % 100 === 0 ? 0.1 : 0.05);
-			grid.moveTo(x, 0)
-				.lineTo(x, height);
-			x += GRID_DISTANCE;
-		} while (x <= width);
-
-		let y = 0;
-		do {
-			grid.lineStyle(1, 0xFFFFFF, y % 100 === 0 ? 0.1 : 0.05);
-			grid.moveTo(0, y)
-				.lineTo(width, y);
-			y += GRID_DISTANCE;
-		} while (y <= height);
+		for (let r = 0; r < rows; r++) {
+			for (let c = 0; c < cols; c++) {
+				const x = (r + c) % 2;
+				grid.fillAlpha = (x + 0.5) - x * 0.5;
+				grid.drawRect(c * CELL_SIZE, r * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+			}
+		}
 
 		grid.cacheAsBitmap = true;
 	}
 
 	private _createGroup() {
-		const group = this.game.add.graphics();
-		group.inputEnabled = true;
-		group.input.draggable = true;
-		return group;
+		return this.game.add.graphics(this.game.width * 0.5, this.game.height * 0.5);
 	}
 
 	private _createGrid() {
 		const grid = new Phaser.Graphics(this.game, 0, 0);
 		this.game.world.addChildAt(grid, 0);
+
+		grid.inputEnabled = true;
+		const { input, events } = grid;
+
+		input.enableDrag();
+		input.setDragLock(false, false);
+		input.dragDistanceThreshold = 10;
+
+		events.onDragStart.add(this._onDragStart, this);
+		events.onDragUpdate.add(this._onDragUpdate, this);
+		events.onDragStop.add(this._onDragStop, this);
+
 		return grid;
+	}
+
+	private _dragOffset = new Phaser.Point();
+	private _isDragging = false;
+
+	private _onDragStart(_: any, pointer: Phaser.Pointer) {
+		if (!this.anim) return;
+		const target = this.group.position;
+		this._dragOffset.set(pointer.x - target.x, pointer.y - target.y);
+		this.game.canvas.style.cursor = 'move';
+		this._isDragging = true;
+	}
+
+	private _onDragUpdate(_: any, pointer: Phaser.Pointer) {
+		if (!this._isDragging) return;
+		this.group.position.set(pointer.x - this._dragOffset.x, pointer.y - this._dragOffset.y);
+	}
+
+	private _onDragStop() {
+		this._isDragging = false;
+		this.game.canvas.style.cursor = 'default';
 	}
 
 	public loadFile(fileUrl: string) {
@@ -99,7 +120,7 @@ export class Preview {
 		load.start();
 	}
 
-	private onLoadComplete() {
+	private addAnimToStage() {
 		const game = this.game;
 		const group = this.group;
 
@@ -131,5 +152,10 @@ export class Preview {
 			this.anim.state.timeScale = 1;
 		} else
 			this.anim.state.timeScale = 0;
+	}
+
+	public setBackgroundColor(color: number) {
+		this._backgroundColor = color;
+		this._drawGrid();
 	}
 }
