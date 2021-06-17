@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { Events } from '../events';
 import { SpineAnimation } from './intf';
-import { Preview } from './preview';
+import { AVAILABLE_BG_COLORS, Preview } from './preview';
 
 export class UI {
 	private readonly actionsPanel: HTMLElement;
@@ -21,6 +21,25 @@ export class UI {
 		const loadButton = document.getElementById('load-button');
 		loadButton.addEventListener('click', () => ipcRenderer.send(Events.OPEN_FILE_REQUEST));
 		this.reloadButton.addEventListener('click', () => ipcRenderer.send(Events.RELOAD_FILE_REQUEST));
+
+		const selector = document.getElementById('bg-color-selector');
+		AVAILABLE_BG_COLORS.forEach(color => {
+			const el = document.createElement('div');
+			el.classList.add('dot');
+			el.style.backgroundColor = Phaser.Color.getWebRGB(color);
+			if (color === preview.backgroundColor)
+				el.classList.add('selected');
+			el.onclick = () => {
+				this.preview.backgroundColor = color;
+				let child = selector.firstElementChild;
+				while (child) {
+					child.classList.remove('selected');
+					child = child.nextElementSibling;
+				}
+				el.classList.add('selected');
+			};
+			selector.appendChild(el);
+		});
 	}
 
 	public onFileLoaded(filename: string, animations: SpineAnimation[]) {
@@ -32,7 +51,7 @@ export class UI {
 
 		const animPanel = this.animPanel = document.createElement('div');
 		animPanel.id = 'animations-panel';
-		animPanel.classList.add('panel');
+		animPanel.classList.add('panel', 'faded');
 
 		const title = document.createElement('div');
 		title.classList.add('title');

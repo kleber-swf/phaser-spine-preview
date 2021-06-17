@@ -21,6 +21,15 @@ body, .button {
 
 .invisible { display: none !important; }
 
+.faded {
+  transition: opacity 50ms;
+  opacity: 0.5;
+}
+
+.faded:hover {
+  opacity: 1;
+}
+
 .panel {
   padding: 16px;
   background-color: rgba(32, 37, 41, 0.4);
@@ -50,7 +59,7 @@ body, .button {
   font-weight: bold;
   cursor: pointer;
   user-select: none;
-  transition: all 0.1s;
+  transition: all 100ms;
 }
 
 .button:hover {
@@ -70,24 +79,26 @@ body, .button {
   background-color: #A6143B
 }
 
-#animation-name, #file-name {
+.name-label {
   font-size: 24px;
   font-weight: bold;
   color:#F3F5F8;
   text-align: center;
   opacity: 1;
   transition: opacity 0.1s;
+  pointer-events: all;
+  user-select: none;
 }
 
-#animation-name:hover, #file-name:hover {
+.name-label:hover {
   opacity: 0.1;
 }
 
 div.center {
-  position: absolute;
-  left: 0;
-  right: 0;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 div.left {
@@ -105,6 +116,7 @@ div.left {
 div.right {
   position: absolute;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 20px;
@@ -113,5 +125,45 @@ div.right {
   bottom: 0;
 }
 
-div.top { top: 10px; }
-div.bottom { bottom: 10px; }
+div.top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 10px;
+}
+
+div.bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+}
+
+.space {
+  display: flex;
+  flex:1;
+}
+
+#bg-color-selector {
+  display: flex;
+  pointer-events: all;
+}
+
+div.dot {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0);
+  border-radius: 12px;
+  margin: 2px;
+  opacity: 0.5;
+  transition: opacity 250ms;
+}
+
+div.dot:hover {
+  opacity: 1;
+}
+
+div.dot.selected {
+  opacity: 1;
+  border-color: rgba(255, 255, 255, 0.6);
+}

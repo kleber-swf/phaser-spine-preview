@@ -18,6 +18,12 @@ export class Preview {
 	private _selectedAnimation: string;
 
 	private _backgroundColor = AVAILABLE_BG_COLORS[0];
+	public get backgroundColor() { return this._backgroundColor; }
+
+	public set backgroundColor(color: number) {
+		this._backgroundColor = color;
+		this._drawGrid();
+	}
 
 	public readonly onFileLoaded = new Phaser.Signal();
 

@@ -43,8 +43,7 @@ const createWindow = (): void => {
 
   new Editor(mainWindow);
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  if (!app.isPackaged) mainWindow.webContents.openDevTools();
 };
 
 app.on('ready', createWindow);
