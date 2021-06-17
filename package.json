@@ -1,7 +1,7 @@
 {
   "name": "phaser-spine-preview",
   "productName": "phaser-spine-preview",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Phaser Spine Preview",
   "main": ".webpack/main",
   "scripts": {
