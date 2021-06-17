@@ -32,6 +32,7 @@ export class Preview {
 	}
 
 	public readonly onFileLoaded = new Phaser.Signal();
+	public readonly onToggleHelp = new Phaser.Signal();
 
 	constructor() {
 		this.game = new Phaser.Game({
@@ -54,13 +55,17 @@ export class Preview {
 	public create() {
 		const game = this.game;
 		this.group = this._createGroup();
-
-		game.input.keyboard.addKey(Phaser.KeyCode.R).onDown.add(this.reset, this);
-		game.input.keyboard.addKey(Phaser.KeyCode.P).onDown.add(this.togglePivot, this);
+		this.setupInput(game.input.keyboard);
 
 		game.stage.disableVisibilityChange = true;
 		game.scale.onSizeChange.add(this._drawGrid, this);
 		this._drawGrid();
+	}
+
+	private setupInput(keyboard: Phaser.Keyboard) {
+		keyboard.addKey(Phaser.KeyCode.R).onUp.add(this.reset, this);
+		keyboard.addKey(Phaser.KeyCode.P).onUp.add(this.togglePivot, this);
+		keyboard.addKey(Phaser.KeyCode.H).onUp.add(() => this.onToggleHelp?.dispatch(), this);
 	}
 
 	private _drawGrid() {

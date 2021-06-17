@@ -8,15 +8,21 @@ export class UI {
 	private readonly reloadButton: HTMLElement;
 	private readonly fileNameLabel: HTMLElement;
 	private readonly animNameLabel: HTMLElement;
+	private readonly help: HTMLElement;
 
 	private animPanel: HTMLElement;
+
+	private _helpVisible = false;
 
 	constructor(private readonly preview: Preview) {
 		this.actionsPanel = document.getElementById('action-panel');
 		this.reloadButton = document.getElementById('reload-button');
 		this.fileNameLabel = document.getElementById('file-name');
 		this.animNameLabel = document.getElementById('animation-name');
+		this.help = document.getElementById('help');
+
 		preview.onFileLoaded.add(this.onFileLoaded, this);
+		preview.onToggleHelp.add(this.toggleHelp, this);
 
 		const loadButton = document.getElementById('load-button');
 		loadButton.addEventListener('click', () => ipcRenderer.send(Events.OPEN_FILE_REQUEST));
@@ -98,5 +104,11 @@ export class UI {
 		if (btn) btn.classList.add('selected');
 		this.preview.selectAnim(anim);
 		this.animNameLabel.textContent = anim;
+	}
+
+	private toggleHelp() {
+		this._helpVisible = !this._helpVisible;
+		if (this._helpVisible) this.help.classList.remove('invisible');
+		else this.help.classList.add('invisible');
 	}
 }
