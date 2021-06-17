@@ -160,6 +160,12 @@ export class Preview {
 			this.anim.state.timeScale = 0;
 	}
 
+	public zoom(delta: number) {
+		if (!this.anim) return;
+		const s = Math.max(0.1, Math.min(10, this.group.scale.x + delta * -0.005));
+		this.group.scale.set(s, s);
+	}
+
 	public setBackgroundColor(color: number) {
 		this._backgroundColor = color;
 		this._drawGrid();

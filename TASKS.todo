@@ -3,5 +3,7 @@
 	[x] window state
 	[x] last path opened
 [x] pan
-[ ] zoom
+[x] zoom
 [ ] better animation controls
+[ ] reset scale and position
+[ ] show pivot

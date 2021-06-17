@@ -22,14 +22,23 @@ export class UI {
 		loadButton.addEventListener('click', () => ipcRenderer.send(Events.OPEN_FILE_REQUEST));
 		this.reloadButton.addEventListener('click', () => ipcRenderer.send(Events.RELOAD_FILE_REQUEST));
 
+		this._createColorSelector();
+
+		const content = document.getElementById('content');
+		content.style.pointerEvents = 'all';
+		content.onwheel = (e: WheelEvent) => this.preview.zoom(e.deltaY * (e.ctrlKey ? 0.1 : 1));
+	}
+
+	private _createColorSelector() {
 		const selector = document.getElementById('bg-color-selector');
 		AVAILABLE_BG_COLORS.forEach(color => {
 			const el = document.createElement('div');
 			el.classList.add('dot');
 			el.style.backgroundColor = Phaser.Color.getWebRGB(color);
-			if (color === preview.backgroundColor)
+			if (color === this.preview.backgroundColor)
 				el.classList.add('selected');
 			el.onclick = () => {
+				if (this.preview.backgroundColor === color) return;
 				this.preview.backgroundColor = color;
 				let child = selector.firstElementChild;
 				while (child) {
